@@ -2,8 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from '@/app/providers/SessionProvider'
 
 export default function Navbar() {
+  const { user, loading, logout } = useSession()
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <nav
@@ -32,9 +35,34 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center gap-2 md:gap-3">
-            <Link
-              href="/login"
-              className="
+            {loading ? (
+              <div className="w-11 h-11 animate-pulse bg-black rounded-full" />
+            ) : user ? (
+              <div
+                className="flex items-center gap-3 px-4 py-1 bg-white/10 rounded-full backdrop-blur-md
+"
+              >
+                {user.pic ? (
+                  <img
+                    src={user.pic}
+                    alt="avatar"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                ) : null}
+                <span className="text-sm">{user.name || user.email}</span>
+                <button
+                  onClick={logout}
+                  className="rounded-full border px-2 py-2 text-sm cursor-pointer"
+                >
+                  close
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="http://127.0.0.1:4000/auth/spotify/login"
+                className="
                 inline-flex items-center gap-3
                 rounded-full px-5 py-3
                 bg-primary text-white
@@ -45,18 +73,19 @@ export default function Navbar() {
                 hover:bg-primary/80
                 transition-all duration-300
               "
-            >
-              <Image
-                src="/ico/spotify.svg"
-                alt="Spotify Logo"
-                width={24}
-                height={24}
-                className="opacity-90"
-              />
-              <span className="text-sm md:text-base font-medium tracking-tight">
-                Login with Spotify
-              </span>
-            </Link>
+              >
+                <Image
+                  src="/ico/spotify.svg"
+                  alt="Spotify Logo"
+                  width={24}
+                  height={24}
+                  className="opacity-90"
+                />
+                <span className="text-sm md:text-base font-medium tracking-tight">
+                  Login with Spotify
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       </nav>
