@@ -2,10 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSession } from '@/app/providers/SessionProvider'
+
+import { signIn, signOut, useSession } from '@/lib/auth-client'
 
 export default function Navbar() {
-  const { user, loading, logout } = useSession()
+  const { data: session, isPending } = useSession()
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -35,33 +36,40 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center gap-2 md:gap-3">
-            {loading ? (
-              <div className="w-11 h-11 animate-pulse bg-black rounded-full" />
-            ) : user ? (
+            {isPending ? (
+              <div className="w-11 h-11 animate-pulse bg-black/30 rounded-full" />
+            ) : session?.user ? (
               <div
                 className="flex items-center gap-3 px-4 py-1 bg-white/10 rounded-full backdrop-blur-md
 "
               >
-                {user.pic ? (
+                {session.user.image ? (
                   <img
-                    src={user.pic}
+                    src={session.user.image}
                     alt="avatar"
                     width={32}
                     height={32}
                     className="rounded-full"
                   />
                 ) : null}
-                <span className="text-sm">{user.name || user.email}</span>
+                <span className="text-sm">{session.user.name || session.user.email}</span>
                 <button
-                  onClick={logout}
+                  onClick={async () => {
+                    await signOut()
+                  }}
                   className="rounded-full border px-2 py-2 text-sm cursor-pointer"
                 >
                   close
                 </button>
               </div>
             ) : (
-              <Link
-                href="http://127.0.0.1:4000/auth/spotify/login"
+              <button
+                onClick={async () => {
+                  await signIn.social({
+                    provider: 'spotify',
+                    callbackURL: ''
+                  })
+                }}
                 className="
                 inline-flex items-center gap-3
                 rounded-full px-5 py-3
@@ -72,7 +80,7 @@ export default function Navbar() {
                 hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)]
                 hover:bg-primary/80
                 transition-all duration-300
-              "
+                "
               >
                 <Image
                   src="/ico/spotify.svg"
@@ -84,7 +92,7 @@ export default function Navbar() {
                 <span className="text-sm md:text-base font-medium tracking-tight">
                   Login with Spotify
                 </span>
-              </Link>
+              </button>
             )}
           </div>
         </div>
