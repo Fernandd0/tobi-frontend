@@ -2,11 +2,52 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { signIn, signOut, useSession } from '@/lib/auth-client'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { Session } from '@supabase/supabase-js'
 
 export default function Navbar() {
-  const { data: session, isPending } = useSession()
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const getInitialSession = async () => {
+      const { data } = await supabase.auth.getSession()
+      setSession(data.session)
+      setLoading(false)
+    }
+
+    getInitialSession()
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      setLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'spotify',
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+        scopes: 'user-top-read user-read-private user-read-email'
+      }
+    })
+  }
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setSession(null)
+    window.location.href = '/'
+  }
+
+  const userImage = session?.user.user_metadata?.avatar_url || session?.user.user_metadata?.picture
+  const userName = session?.user.user_metadata?.full_name || session?.user.email
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -23,53 +64,81 @@ export default function Navbar() {
             rounded-full
           "
         >
+          {/* HOME BUTTON */}
           <Link
             href="/"
             aria-label="Home"
             className="
             backdrop-blur-md inline-flex p-4 shrink-0 items-center justify-center rounded-full 
             bg-primary text-white
-              transition
+              transition hover:scale-105
             "
           >
             <Image src="/ico/home.svg" alt="" width={20} height={20} />
           </Link>
 
           <div className="flex items-center gap-2 md:gap-3">
-            {isPending ? (
-              <div className="w-11 h-11 animate-pulse bg-black/30 rounded-full" />
+            {loading ? (
+              <div className="w-11 h-11 animate-pulse bg-primary rounded-full" />
             ) : session?.user ? (
-              <div
-                className="flex items-center gap-3 px-4 py-1 bg-white/10 rounded-full backdrop-blur-md
-"
-              >
-                {session.user.image ? (
-                  <img
-                    src={session.user.image}
-                    alt="avatar"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                ) : null}
-                <span className="text-sm">{session.user.name || session.user.email}</span>
-                <button
-                  onClick={async () => {
-                    await signOut()
-                  }}
-                  className="rounded-full border px-2 py-2 text-sm cursor-pointer"
+              <>
+                {/* --- NUEVO BOTÓN: TRACKS / STATS --- */}
+                <Link
+                  href="/tracks"
+                  className="
+                    flex items-center justify-center w-11 h-11 rounded-full
+                    bg-primary text-white border border-white/10
+                    hover:bg-primary/90 transition hover:scale-105
+                    backdrop-blur-md
+                  "
+                  title="My Top Tracks"
                 >
-                  close
-                </button>
-              </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 20v-6M6 20V10M18 20V4" />
+                  </svg>
+                </Link>
+
+                {/* USER INFO PILL */}
+                <div className="flex items-center gap-3 px-4 py-2.5 bg-primary rounded-full backdrop-blur-md border border-white/10">
+                  {userImage ? (
+                    <img
+                      src={userImage}
+                      alt="avatar"
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-zinc-700 rounded-full" />
+                  )}
+
+                  <span className="text-sm text-white font-medium hidden sm:block">
+                    {userName?.split(' ')[0]}
+                  </span>
+
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-full border border-white/10 w-8 h-8 text-xs hover:bg-white/10 text-white transition flex items-center justify-center"
+                    title="Sign Out"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </>
             ) : (
+              // LOGIN BUTTON
               <button
-                onClick={async () => {
-                  await signIn.social({
-                    provider: 'spotify',
-                    callbackURL: ''
-                  })
-                }}
+                onClick={handleLogin}
                 className="
                 inline-flex items-center gap-3
                 rounded-full px-5 py-3

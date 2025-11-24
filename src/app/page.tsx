@@ -1,7 +1,29 @@
 'use client'
 import Image from 'next/image'
+import { createClient } from '@/lib/supabase/client'
+import { useState } from 'react'
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleLogin = async () => {
+    try {
+      setIsLoading(true)
+      const supabase = createClient()
+
+      await supabase.auth.signInWithOAuth({
+        provider: 'spotify',
+        options: {
+          redirectTo: `${location.origin}/auth/callback`,
+          scopes: 'user-top-read user-read-private user-read-email'
+        }
+      })
+    } catch (error) {
+      console.error('Login failed', error)
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="font-sans items-center justify-items-center min-h-screen max-w-screen-sm mx-auto pt-4">
       <section
@@ -70,21 +92,31 @@ export default function Home() {
         </div>
 
         <div className="max-w-2xl mx-auto text-center mt-10">
+          {/* 5. AQUI CONECTAMOS EL BOTÓN */}
           <button
             type="button"
-            className="cursor-pointer hover:bg-orange/80 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-sm font-medium bg-orange text-white transition"
-            data-action="open-generate-modal"
+            onClick={handleLogin}
+            disabled={isLoading}
+            className="cursor-pointer hover:bg-orange/80 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-sm font-medium bg-orange text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Generate my AI card
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-4 h-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-            </svg>
+            {isLoading ? 'Connecting Spotify...' : 'Generate my AI card'}
+
+            {!isLoading && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </section>
