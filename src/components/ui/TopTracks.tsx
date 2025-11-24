@@ -1,6 +1,22 @@
 import Image from 'next/image'
 
-export function TopTracks({ tracks }: { tracks: any[] }) {
+interface Artist {
+  name: string
+}
+
+interface Track {
+  id: string
+  name: string
+  external_urls: {
+    spotify: string
+  }
+  album: {
+    images: { url: string }[]
+  }
+  artists: Artist[]
+}
+
+export function TopTracks({ tracks }: { tracks: Track[] }) {
   if (!tracks?.length) {
     return <div className="text-[#6E6E6E] py-8 text-center">No tracks found.</div>
   }
@@ -38,7 +54,7 @@ export function TopTracks({ tracks }: { tracks: any[] }) {
           <div className="flex-1 min-w-0 text-left">
             <h3 className="font-bold text-primary truncate text-[15px]">{track.name}</h3>
             <p className="text-xs text-[#6E6E6E] truncate mt-0.5">
-              {track.artists.map((a: any) => a.name).join(', ')}
+              {track.artists.map((a) => a.name).join(', ')}
             </p>
           </div>
 

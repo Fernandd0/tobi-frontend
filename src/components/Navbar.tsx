@@ -28,7 +28,7 @@ export default function Navbar() {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [supabase.auth])
 
   const handleLogin = async () => {
     await supabase.auth.signInWithOAuth({
@@ -64,7 +64,6 @@ export default function Navbar() {
             rounded-full
           "
         >
-          {/* HOME BUTTON */}
           <Link
             href="/"
             aria-label="Home"
@@ -82,7 +81,6 @@ export default function Navbar() {
               <div className="w-11 h-11 animate-pulse bg-primary rounded-full" />
             ) : session?.user ? (
               <>
-                {/* --- NUEVO BOTÓN: TRACKS / STATS --- */}
                 <Link
                   href="/tracks"
                   className="
@@ -108,15 +106,15 @@ export default function Navbar() {
                   </svg>
                 </Link>
 
-                {/* USER INFO PILL */}
                 <div className="flex items-center gap-3 px-4 py-2.5 bg-primary rounded-full backdrop-blur-md border border-white/10">
                   {userImage ? (
-                    <img
+                    <Image
                       src={userImage}
                       alt="avatar"
                       width={32}
                       height={32}
                       className="rounded-full"
+                      unoptimized
                     />
                   ) : (
                     <div className="w-8 h-8 bg-zinc-700 rounded-full" />
@@ -136,7 +134,6 @@ export default function Navbar() {
                 </div>
               </>
             ) : (
-              // LOGIN BUTTON
               <button
                 onClick={handleLogin}
                 className="
