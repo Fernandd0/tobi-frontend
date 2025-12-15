@@ -102,12 +102,12 @@ export default function Navbar() {
 
         <div className="flex-1" />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           {loading ? (
             <div className="w-10 h-10 animate-pulse bg-gray-200 rounded-lg" />
           ) : session?.user ? (
-            <>
-              <div className="relative group pb-4 -mb-4 z-50">
+            <div className="flex items-center gap-2 justify-center">
+              <div className="relative group">
                 <button
                   className="
                     hidden sm:flex items-center justify-center h-9 px-4 rounded-xl
@@ -193,15 +193,15 @@ export default function Navbar() {
               </div>
 
               <div className="relative">
-                <div className="relative group pb-4 -mb-4 z-50">
-                  <button className="relative outline-none">
+                <div className="relative group">
+                  <button className="relative outline-none flex items-center justify-center h-9 w-9 rounded-lg">
                     {userImage ? (
                       <Image
                         src={userImage}
                         alt="avatar"
                         width={36}
                         height={36}
-                        className="rounded-full ring-2 ring-white shadow-sm hover:ring-orange/50 transition-all duration-300"
+                        className="rounded-lg ring-2 ring-white shadow-sm hover:ring-orange/50 transition-all duration-300"
                         unoptimized
                       />
                     ) : (
@@ -236,7 +236,7 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           ) : (
             <button
               onClick={handleLogin}
