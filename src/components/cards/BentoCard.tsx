@@ -12,7 +12,7 @@ export default function BentoCard({ data, type, userName }: BentoCardProps) {
     <div className="w-[340px] h-[550px] bg-white p-4 rounded-3xl shadow-2xl relative overflow-hidden flex flex-col gap-3">
       <div className="flex justify-between items-end px-1">
         <div>
-          <h3 className="text-2xl font-bold text-black leading-none">{userName}'s</h3>
+          <h3 className="text-2xl font-bold text-black leading-none">{userName}&apos;s</h3>
           <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Top {type}</p>
         </div>
         <div className="bg-orange/10 text-orange px-2 py-1 rounded-lg text-xs font-bold">
@@ -20,6 +20,7 @@ export default function BentoCard({ data, type, userName }: BentoCardProps) {
         </div>
       </div>
 
+      {/* Mini Bento Grid - 4x4 */}
       <div className="grid grid-cols-4 grid-rows-4 gap-2 flex-1 min-h-0">
         {data.slice(0, 9).map((item, i) => {
           let spanClass = 'col-span-1 row-span-1'
@@ -29,18 +30,17 @@ export default function BentoCard({ data, type, userName }: BentoCardProps) {
 
           const isMain = i === 0
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const itemAny = item as any
+          const imageUrl = itemAny?.images?.[0]?.url || itemAny?.album?.images?.[0]?.url
+
           return (
             <div
               key={item.id}
               className={`relative rounded-xl overflow-hidden group bg-gray-100 ${spanClass}`}
             >
-              {(item as any)?.images?.[0]?.url || (item as any)?.album?.images?.[0]?.url ? (
-                <Image
-                  src={(item as any)?.images?.[0]?.url || (item as any)?.album?.images?.[0]?.url}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                />
+              {imageUrl ? (
+                <Image src={imageUrl} alt={item.name} fill className="object-cover" />
               ) : (
                 <div className="w-full h-full bg-gray-200" />
               )}

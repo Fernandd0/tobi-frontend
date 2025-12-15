@@ -21,10 +21,10 @@ export default function DevCard({ data, type, userName }: DevCardProps) {
 
       <div className="pl-4">
         <div className="text-[#9CDCFE] mb-1">
-          user = <span className="text-[#CE9178]">"{userName}"</span>;
+          user = <span className="text-[#CE9178]">&quot;{userName}&quot;</span>;
         </div>
         <div className="text-[#9CDCFE] mb-1">
-          category = <span className="text-[#CE9178]">"Top {type}"</span>;
+          category = <span className="text-[#CE9178]">&quot;Top {type}&quot;</span>;
         </div>
 
         <div className="text-[#DCDCAA] mt-4 mb-1">getFavorites() {'{'}</div>
@@ -35,7 +35,7 @@ export default function DevCard({ data, type, userName }: DevCardProps) {
         <div className="pl-8 flex flex-col gap-1">
           {data.slice(0, 10).map((item, i) => (
             <div key={item.id} className="text-[#CE9178] truncate">
-              "{item.name}"<span className="text-[#D4D4D4]">{i < 9 ? ',' : ''}</span>
+              &quot;{item.name}&quot;<span className="text-[#D4D4D4]">{i < 9 ? ',' : ''}</span>
             </div>
           ))}
         </div>

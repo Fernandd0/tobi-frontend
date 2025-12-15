@@ -2,18 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { toPng } from 'html-to-image'
-import {
-  Download,
-  Share2,
-  X,
-  Code,
-  Receipt,
-  LayoutGrid,
-  Loader2,
-  Instagram,
-  Facebook,
-  Smartphone
-} from 'lucide-react'
+import { Download, X, Code, Receipt, LayoutGrid, Loader2 } from 'lucide-react'
 import { Artist, Track } from '@/types'
 import Button from '@/components/ui/Button'
 import DevCard from './cards/DevCard'
