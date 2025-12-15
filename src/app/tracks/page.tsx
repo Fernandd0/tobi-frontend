@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
 import { Track } from '@/types'
+import CardGenerator from '@/components/CardGenerator'
 
 export default async function TracksPage() {
   const supabase = await createClient()
@@ -38,6 +39,8 @@ export default async function TracksPage() {
   const data = await res.json()
   const tracks: Track[] = data.items || []
 
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
+
   return (
     <div className="min-h-screen pb-24 pt-28">
       <div className="mb-6 px-2">
@@ -45,10 +48,10 @@ export default async function TracksPage() {
         <p className="text-[#6E6E6E] text-sm font-medium">Your most played songs.</p>
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 gap-1 aspect-square">
+      <div className="grid grid-cols-16 md:grid-rows-16 gap-1 aspect-square">
         {tracks.map((track, i: number) => {
           let spanClass = 'col-span-4 row-span-4 aspect-square'
-          const mobileClass = 'col-span-4 row-span-8'
+          const mobileClass = 'col-span-4 row-span-4'
 
           if (i === 0) {
             spanClass = `${mobileClass} md:col-span-8 md:row-span-8 md:aspect-square`
@@ -68,8 +71,16 @@ export default async function TracksPage() {
             spanClass = `${mobileClass} md:col-span-1 md:row-span-2`
           }
 
-          const titleSize = 'text-lg md:text-xl'
-          const badgeSize = 'w-6 h-6 md:w-8 md:h-8 text-xs md:text-sm'
+          const titleSize =
+            i === 0
+              ? 'text-2xl md:text-4xl'
+              : i < 3
+              ? 'text-xl md:text-2xl'
+              : 'text-base md:text-lg'
+          const badgeSize =
+            i === 0
+              ? 'w-8 h-8 md:w-12 md:h-12 text-sm md:text-xl'
+              : 'w-6 h-6 md:w-8 md:h-8 text-xs md:text-sm'
 
           return (
             <div
@@ -109,7 +120,7 @@ export default async function TracksPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 pb-8">
-        <Button size="lg">Create your Card</Button>
+        <CardGenerator data={tracks} type="tracks" userName={userName} />
         <Button variant="secondary" size="lg">
           Check your Vibe
         </Button>

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
 import { Artist } from '@/types'
+import CardGenerator from '@/components/CardGenerator'
 
 export default async function ArtistsPage() {
   const supabase = await createClient()
@@ -37,6 +38,8 @@ export default async function ArtistsPage() {
   }
   const data = await res.json()
   const artists: Artist[] = data.items || []
+
+  const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
 
   return (
     <div className="min-h-screen pb-24 pt-28">
@@ -117,7 +120,7 @@ export default async function ArtistsPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 pb-8">
-        <Button size="lg">Create your Card</Button>
+        <CardGenerator data={artists} type="artists" userName={userName} />
         <Button variant="secondary" size="lg">
           Check your Vibe
         </Button>
