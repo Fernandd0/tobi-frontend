@@ -49,9 +49,6 @@ export default function Navbar() {
   }
 
   const userImage = session?.user.user_metadata?.avatar_url || session?.user.user_metadata?.picture
-  const userName = session?.user.user_metadata?.full_name || session?.user.email
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center pt-6 px-4">

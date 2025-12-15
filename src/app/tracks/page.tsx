@@ -2,10 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
+import { Track } from '@/types'
 
 export default async function TracksPage() {
   const supabase = await createClient()
-
   const {
     data: { user },
     error
@@ -35,9 +35,8 @@ export default async function TracksPage() {
   if (!res.ok) {
     return <div className="p-10 text-primary">Error connecting to Spotify API.</div>
   }
-
   const data = await res.json()
-  const tracks = data.items || []
+  const tracks: Track[] = data.items || []
 
   return (
     <div className="min-h-screen pb-24 pt-28">
@@ -47,7 +46,7 @@ export default async function TracksPage() {
       </div>
 
       <div className="grid grid-cols-16 grid-rows-16 gap-1 aspect-square">
-        {tracks.map((track: any, i: number) => {
+        {tracks.map((track, i: number) => {
           let spanClass = 'col-span-4 row-span-4 aspect-square'
           const mobileClass = 'col-span-4 row-span-8'
 
