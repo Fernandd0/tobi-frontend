@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
 
-export default async function TracksPage() {
+export default async function ArtistsPage() {
   const supabase = await createClient()
 
   const {
@@ -25,7 +25,7 @@ export default async function TracksPage() {
   }
 
   const res = await fetch(
-    'https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=20',
+    'https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=20',
     {
       headers: { Authorization: `Bearer ${providerToken}` },
       cache: 'no-store'
@@ -37,17 +37,17 @@ export default async function TracksPage() {
   }
 
   const data = await res.json()
-  const tracks = data.items || []
+  const artists = data.items || []
 
   return (
     <div className="min-h-screen pb-24 pt-28">
       <div className="mb-6 px-2">
-        <h1 className="text-3xl font-bold tracking-tight text-primary">Top Tracks</h1>
-        <p className="text-[#6E6E6E] text-sm font-medium">Your most played songs.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-primary">Top Artists</h1>
+        <p className="text-[#6E6E6E] text-sm font-medium">Your most listened to artists.</p>
       </div>
 
-      <div className="grid grid-cols-16 grid-rows-16 gap-1 aspect-square">
-        {tracks.map((track: any, i: number) => {
+      <div className="grid grid-cols-16 md:grid-rows-16 gap-1 aspect-square">
+        {artists.map((artist: any, i: number) => {
           let spanClass = 'col-span-4 row-span-4 aspect-square'
           const mobileClass = 'col-span-4 row-span-8'
 
@@ -69,18 +69,26 @@ export default async function TracksPage() {
             spanClass = `${mobileClass} md:col-span-1 md:row-span-2`
           }
 
-          const titleSize = 'text-lg md:text-xl'
-          const badgeSize = 'w-6 h-6 md:w-8 md:h-8 text-xs md:text-sm'
+          const titleSize =
+            i === 0
+              ? 'text-2xl md:text-4xl'
+              : i < 3
+              ? 'text-xl md:text-2xl'
+              : 'text-base md:text-lg'
+          const badgeSize =
+            i === 0
+              ? 'w-8 h-8 md:w-12 md:h-12 text-sm md:text-xl'
+              : 'w-6 h-6 md:w-8 md:h-8 text-xs md:text-sm'
 
           return (
             <div
-              key={track.id}
+              key={artist.id}
               className={`relative group rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 ${spanClass}`}
             >
-              {track.album.images[0] && (
+              {artist.images[0] && (
                 <Image
-                  src={track.album.images[0].url}
-                  alt={track.name}
+                  src={artist.images[0].url}
+                  alt={artist.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -94,7 +102,7 @@ export default async function TracksPage() {
                     <p
                       className={`text-white font-bold leading-tight drop-shadow-sm line-clamp-2 ${titleSize}`}
                     >
-                      {track.name}
+                      {artist.name}
                     </p>
                   )}
                   <span

@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useState } from 'react'
+import Button from '@/components/ui/Button'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,14 +29,12 @@ export default function Home() {
     <div className="font-sans items-center justify-items-center min-h-screen max-w-screen-sm mx-auto pt-4">
       <section
         id="hero"
-        className="relative flex flex-col items-center justify-center text-center py-24 px-4"
+        className="relative flex flex-col items-center justify-center text-center py-24"
       >
         <div className="mx-auto">
           <h1 className="text-5xl font-bold mb-6 leading-tight tracking-tight">
             Your playlists. Your vibe.{' '}
-            <span className="text-primary hover:text-orange transition-colors duration-300">
-              Your story.
-            </span>
+            <span className="text-orange transition-colors duration-300">Your story.</span>
           </h1>
           <p className="text-lg text-subtext mb-10">
             Tobi turns your listening data into shareable cards and brutally honest AI takes mouthly
@@ -92,19 +91,19 @@ export default function Home() {
         </div>
 
         <div className="max-w-2xl mx-auto text-center mt-10">
-          {/* 5. AQUI CONECTAMOS EL BOTÓN */}
-          <button
+          <Button
             type="button"
             onClick={handleLogin}
             disabled={isLoading}
-            className="cursor-pointer hover:bg-orange/80 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-sm font-medium bg-orange text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+            size="lg"
+            className="w-full sm:w-auto"
           >
             {isLoading ? 'Connecting Spotify...' : 'Generate my AI card'}
 
             {!isLoading && (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
+                className="w-4 h-4 ml-2"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -117,7 +116,7 @@ export default function Home() {
                 />
               </svg>
             )}
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -158,12 +157,7 @@ export default function Home() {
               className="w-full px-4 py-3 rounded-xl border border-border bg-transparent outline-none"
               required
             />
-            <button
-              type="submit"
-              className="px-5 py-3 rounded-xl border border-border bg-orange hover:bg-orange/80 cursor-pointer text-white transition text-sm font-medium"
-            >
-              Send
-            </button>
+            <Button type="submit">Send</Button>
           </form>
 
           <p className="mt-6 text-sm text-subtext">
