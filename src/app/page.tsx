@@ -1,32 +1,10 @@
 'use client'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
-import { useState } from 'react'
 import Button from '@/components/ui/Button'
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handleLogin = async () => {
-    try {
-      setIsLoading(true)
-      const supabase = createClient()
-
-      await supabase.auth.signInWithOAuth({
-        provider: 'spotify',
-        options: {
-          redirectTo: `${location.origin}/auth/callback`,
-          scopes: 'user-top-read user-read-private user-read-email'
-        }
-      })
-    } catch (error) {
-      console.error('Login failed', error)
-      setIsLoading(false)
-    }
-  }
-
   return (
-    <div className="font-sans items-center justify-items-center min-h-screen max-w-screen-sm mx-auto pt-4">
+    <div className="font-sans items-center justify-items-center max-w-screen-sm mx-auto pt-4">
       <section
         id="hero"
         className="relative flex flex-col items-center justify-center text-center py-24"
@@ -42,33 +20,60 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="relative w-full mx-auto">
-          <a
-            href="#ai-cards"
-            className="absolute right-24 top-12 rotate-9 opacity-70 hover:opacity-90 hover:rotate-12 transition-all duration-300"
-            aria-label="See AI shareable cards"
-          >
+        <div className="relative w-full max-w-[600px] h-[300px] sm:h-[450px] mx-auto group perspective-1000">
+          <div className="absolute left-1/2 top-4 w-[160px] sm:w-[250px] -translate-x-[85%] rotate-[-12deg] transition-all duration-500 ease-out group-hover:rotate-[-25deg] group-hover:-translate-x-[90%] group-hover:-translate-y-4 hover:z-30 hover:!scale-110 z-10">
             <Image
-              src="/img/iphone.png"
-              alt="Secondary Card Mock"
+              src="/img/card2.webp"
+              alt="Spotify Recap Card 2"
               width={250}
-              height={350}
-              className="drop-shadow-xl"
+              height={370}
+              className="rounded-2xl shadow-2xl border border-white/5 object-cover h-[240px] sm:h-[370px] w-full"
             />
-          </a>
+          </div>
 
-          <Image
-            src="/img/iphone.png"
-            alt="Tobi Landing Graphic"
-            width={280}
-            height={400}
-            className="transition-transform duration-500 drop-shadow-xl mx-auto"
-          />
+          <div className="absolute left-1/2 top-4 w-[160px] sm:w-[250px] -translate-x-[15%] rotate-[12deg] transition-all duration-500 ease-out group-hover:rotate-[25deg] group-hover:-translate-x-[10%] group-hover:-translate-y-4 hover:z-30 hover:!scale-110 z-10">
+            <Image
+              src="/img/card3.webp"
+              alt="Spotify Recap Card 3"
+              width={250}
+              height={370}
+              className="rounded-2xl shadow-2xl border border-white/5 object-cover h-[240px] sm:h-[370px] w-full"
+            />
+          </div>
+
+          <div className="absolute left-1/2 top-0 w-[160px] sm:w-[250px] -translate-x-1/2 z-20 transition-all duration-500 ease-out group-hover:-translate-y-6 hover:!scale-110 hover:z-30">
+            <Image
+              src="/img/card1.webp"
+              alt="Spotify Recap Card 1"
+              width={250}
+              height={370}
+              className="rounded-2xl shadow-2xl drop-shadow-2xl border border-white/10 object-cover h-[240px] sm:h-[370px] w-full"
+              priority
+            />
+          </div>
         </div>
 
-        <p className="mt-6 text-sm text-subtext">
-          Weekly or monthly recap cards — tap the second card to see AI cards ↓
-        </p>
+        <div className="mt-10 flex justify-center">
+          <div className="group flex items-center gap-2 text-sm font-medium text-subtext transition-colors duration-300">
+            Sign in to check your stats
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="group-hover:translate-x-1 transition-transform duration-300 group-hover:text-orange"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" x2="3" y1="12" y2="12" />
+            </svg>
+          </div>
+        </div>
       </section>
 
       <section id="ai-cards" className="py-24 px-4">
@@ -82,40 +87,26 @@ export default function Home() {
 
         <div className="mt-10">
           <Image
-            src="/img/iphone.png"
+            src="/img/cardVibe.webp"
             alt="Secondary Card Mock"
-            width={200}
-            height={200}
-            className="drop-shadow-xl mx-auto"
+            width={350}
+            height={350}
+            className="drop-shadow-xl mx-auto rounded-xl"
           />
         </div>
 
         <div className="max-w-2xl mx-auto text-center mt-10">
-          <Button
-            type="button"
-            onClick={handleLogin}
-            disabled={isLoading}
-            size="lg"
-            className="w-full sm:w-auto"
-          >
-            {isLoading ? 'Connecting Spotify...' : 'Generate my AI card'}
-
-            {!isLoading && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 ml-2"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            )}
+          <Button type="button" size="lg" className="w-full sm:w-auto">
+            Generate my AI card
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 ml-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
           </Button>
         </div>
       </section>
@@ -124,9 +115,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-4xl font-semibold tracking-tight mb-4">
             Design our{' '}
-            <span className="text-primary hover:text-orange duration-300 transition-colors">
-              Monthly Top Cards
-            </span>
+            <span className="text-orange duration-300 transition-colors">Monthly Top Cards</span>
           </h2>
           <p className="text-lg text-subtext mb-8">
             Got a vision for monthly top cards? Colors, layout, typography we want your take. Drop a
@@ -135,11 +124,11 @@ export default function Home() {
 
           <div className="my-10">
             <Image
-              src="/img/iphone.png"
+              src="/img/buildCards.webp"
               alt="Secondary Card Mock"
-              width={200}
-              height={200}
-              className="drop-shadow-xl mx-auto"
+              width={350}
+              height={350}
+              className="drop-shadow-xl mx-auto rounded-xl"
             />
           </div>
 

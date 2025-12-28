@@ -17,7 +17,7 @@ export default function CardGenerator({ data, type, userName }: CardGeneratorPro
   return (
     <>
       <Button size="lg" onClick={() => setIsOpen(true)}>
-        Create your Card
+        Stats cards
       </Button>
       <CardModal
         isOpen={isOpen}

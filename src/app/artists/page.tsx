@@ -42,7 +42,7 @@ export default async function ArtistsPage() {
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'
 
   return (
-    <div className="min-h-screen pb-24 pt-28">
+    <div className="pt-28">
       <div className="mb-6 px-2">
         <h1 className="text-3xl font-bold tracking-tight text-primary">Top Artists</h1>
         <p className="text-[#6E6E6E] text-sm font-medium">Your most listened to artists.</p>

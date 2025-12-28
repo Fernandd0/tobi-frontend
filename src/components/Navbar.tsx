@@ -65,12 +65,12 @@ export default function Navbar() {
           href="/"
           aria-label="Home"
           className="
-            flex items-center gap-3 pl-2 pr-4 h-10 rounded-xl
+            cursor-pointer flex items-center gap-3 pl-2 pr-4 h-10 rounded-xl
             hover:bg-black/5 transition-colors
             active:scale-95 duration-200
           "
         >
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-orange/10 text-orange">
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/10 to-orange-500/10 text-orange">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -110,16 +110,16 @@ export default function Navbar() {
               <div className="relative group">
                 <button
                   className="
-                    hidden sm:flex items-center justify-center h-9 px-4 rounded-xl
+                    cursor-pointer hidden sm:flex items-center justify-center h-9 px-4 rounded-xl
                     bg-black/5 text-primary text-sm font-medium
                     group-hover:bg-black/10 transition-all duration-200
                   "
                 >
-                  Mi Top
+                  My Top
                 </button>
                 <button
                   className="
-                    sm:hidden flex items-center justify-center w-9 h-9 rounded-xl
+                    cursor-pointer sm:hidden flex items-center justify-center w-9 h-9 rounded-xl
                     bg-black/5 text-primary
                     group-hover:bg-black/10 transition-all active:scale-95 duration-200
                   "
@@ -194,7 +194,7 @@ export default function Navbar() {
 
               <div className="relative">
                 <div className="relative group">
-                  <button className="relative outline-none flex items-center justify-center h-9 w-9 rounded-lg">
+                  <button className="cursor-pointer relative outline-none flex items-center justify-center h-9 w-9 rounded-lg">
                     {userImage ? (
                       <Image
                         src={userImage}
@@ -213,7 +213,7 @@ export default function Navbar() {
                     <div className="bg-white rounded-xl shadow-xl border border-black/5 p-1 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors text-left"
+                        className="cursor-pointer flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors text-left"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +241,7 @@ export default function Navbar() {
             <button
               onClick={handleLogin}
               className="
-                group relative
+                cursor-pointer group relative
                 inline-flex items-center gap-2
                 rounded-xl pl-3 pr-4 py-2
                 bg-black text-white
