@@ -10,6 +10,8 @@ import { Session } from '@supabase/supabase-js'
 export default function Navbar() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isMyTopOpen, setIsMyTopOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -107,22 +109,30 @@ export default function Navbar() {
             <div className="w-10 h-10 animate-pulse bg-gray-200 rounded-lg" />
           ) : session?.user ? (
             <div className="flex items-center gap-2 justify-center">
-              <div className="relative group">
+              <div className="relative">
                 <button
-                  className="
+                  onClick={() => {
+                    setIsMyTopOpen(!isMyTopOpen)
+                    setIsProfileOpen(false)
+                  }}
+                  className={`
                     cursor-pointer hidden sm:flex items-center justify-center h-9 px-4 rounded-xl
-                    bg-black/5 text-primary text-sm font-medium
-                    group-hover:bg-black/10 transition-all duration-200
-                  "
+                    text-primary text-sm font-medium transition-all duration-200
+                    ${isMyTopOpen ? 'bg-black/10' : 'bg-black/5 hover:bg-black/10'}
+                  `}
                 >
                   My Top
                 </button>
                 <button
-                  className="
+                  onClick={() => {
+                    setIsMyTopOpen(!isMyTopOpen)
+                    setIsProfileOpen(false)
+                  }}
+                  className={`
                     cursor-pointer sm:hidden flex items-center justify-center w-9 h-9 rounded-xl
-                    bg-black/5 text-primary
-                    group-hover:bg-black/10 transition-all active:scale-95 duration-200
-                  "
+                    text-primary transition-all active:scale-95 duration-200
+                    ${isMyTopOpen ? 'bg-black/10' : 'bg-black/5 hover:bg-black/10'}
+                  `}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -139,69 +149,81 @@ export default function Navbar() {
                   </svg>
                 </button>
 
-                <div className="absolute right-0 sm:left-1/2 sm:-translate-x-1/2 top-9 lg:pt-2 w-48 hidden group-hover:block hover:block">
-                  <div className="bg-white rounded-xl shadow-xl border border-black/5 p-1 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                    <Link
-                      href="/artists"
-                      className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-primary hover:bg-gray-50 rounded-lg font-medium transition-colors"
-                    >
-                      <div className="p-1.5 rounded-md bg-orange/10 text-orange">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                          <circle cx="9" cy="7" r="4" />
-                          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                      </div>
-                      Top Artists
-                    </Link>
-                    <Link
-                      href="/tracks"
-                      className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-primary hover:bg-gray-50 rounded-lg font-medium transition-colors"
-                    >
-                      <div className="p-1.5 rounded-md bg-green-500/10 text-green-600">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M9 18V5l12-2v13" />
-                          <circle cx="6" cy="18" r="3" />
-                          <circle cx="18" cy="16" r="3" />
-                        </svg>
-                      </div>
-                      Top Tracks
-                    </Link>
+                {isMyTopOpen && (
+                  <div className="absolute right-0 sm:left-1/2 sm:-translate-x-1/2 top-9 lg:pt-2 w-48 z-50">
+                    <div className="bg-white rounded-xl shadow-xl border border-black/5 p-1 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                      <Link
+                        href="/artists"
+                        onClick={() => setIsMyTopOpen(false)}
+                        className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-primary hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                      >
+                        <div className="p-1.5 rounded-md bg-orange/10 text-orange">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                          </svg>
+                        </div>
+                        Top Artists
+                      </Link>
+                      <Link
+                        href="/tracks"
+                        onClick={() => setIsMyTopOpen(false)}
+                        className="flex items-center gap-3 w-full px-3 py-2.5 text-sm text-primary hover:bg-gray-50 rounded-lg font-medium transition-colors"
+                      >
+                        <div className="p-1.5 rounded-md bg-green-500/10 text-green-600">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
+                          </svg>
+                        </div>
+                        Top Tracks
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="relative">
-                <div className="relative group">
-                  <button className="cursor-pointer relative outline-none flex items-center justify-center h-9 w-9 rounded-lg">
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setIsProfileOpen(!isProfileOpen)
+                      setIsMyTopOpen(false)
+                    }}
+                    className="cursor-pointer relative outline-none flex items-center justify-center h-9 w-9 rounded-lg"
+                  >
                     {userImage ? (
                       <Image
                         src={userImage}
                         alt="avatar"
                         width={36}
                         height={36}
-                        className="rounded-lg ring-2 ring-white shadow-sm hover:ring-orange/50 transition-all duration-300"
+                        className={`rounded-lg ring-2 shadow-sm transition-all duration-300 ${
+                          isProfileOpen ? 'ring-orange/50' : 'ring-white hover:ring-orange/50'
+                        }`}
                         unoptimized
                       />
                     ) : (
@@ -209,31 +231,33 @@ export default function Navbar() {
                     )}
                   </button>
 
-                  <div className="absolute right-0 top-9 lg:pt-2 w-40 hidden group-hover:block hover:block">
-                    <div className="bg-white rounded-xl shadow-xl border border-black/5 p-1 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                      <button
-                        onClick={handleLogout}
-                        className="cursor-pointer flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors text-left"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                  {isProfileOpen && (
+                    <div className="absolute right-0 top-9 lg:pt-2 w-40 z-50">
+                      <div className="bg-white rounded-xl shadow-xl border border-black/5 p-1 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        <button
+                          onClick={handleLogout}
+                          className="cursor-pointer flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-lg font-medium transition-colors text-left"
                         >
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                          <polyline points="16 17 21 12 16 7" />
-                          <line x1="21" x2="9" y1="12" y2="12" />
-                        </svg>
-                        Sign Out
-                      </button>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" x2="9" y1="12" y2="12" />
+                          </svg>
+                          Sign Out
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
